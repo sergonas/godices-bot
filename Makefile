@@ -1,4 +1,5 @@
 .PHONY: build
-build: go build -v ./cmd/godicesbot
+build: 
+	go build -v ./cmd/godicesbot
 
 .DEFAULT_GOAL := build

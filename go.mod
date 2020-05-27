@@ -1,3 +1,3 @@
 module github.com/sergonas/godicesbot
 
-go 1.13
+go 1.14
