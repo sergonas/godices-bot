@@ -1,0 +1,5 @@
+auth_token = "token"
+telegram_url = "url"
+
+# possible configuration of user storage here
+[userstorage]

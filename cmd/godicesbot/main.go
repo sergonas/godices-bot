@@ -1,15 +1,33 @@
 package main
 
 import (
+	"flag"
 	"fmt"
+	"log"
 
+	"github.com/BurntSushi/toml"
 	"github.com/sergonas/godicesbot/internal/app/godicesbot"
 )
 
+var (
+	configPath string
+)
+
 func init() {
-	fmt.Println("Init method")
+	flag.StringVar(&configPath, "configPath", "dicesbot.toml", "path to toml config file")
 }
 
 func main() {
+	flag.Parse()
+
+	config := godicesbot.NewConfig()
+	_, err := toml.DecodeFile(configPath, config)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Printf("config: %v", config)
+
 	godicesbot.SendAnnouncment("WARNING")
 }
