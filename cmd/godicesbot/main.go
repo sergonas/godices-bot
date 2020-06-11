@@ -27,7 +27,8 @@ func main() {
 		log.Fatal(err)
 	}
 
-	fmt.Printf("config: %v", config)
-
-	godicesbot.SendAnnouncment("WARNING")
+	bot := godicesbot.NewBotClient(*config)
+	bot.ListenAndServe(func(update godicesbot.Update) {
+		fmt.Printf("%v\n", update)
+	})
 }

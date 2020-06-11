@@ -1,5 +1,5 @@
 auth_token = "token"
-telegram_url = "url"
+telegram_url = "https://api.telegram.org/"
 
 # possible configuration of user storage here
 [userstorage]
