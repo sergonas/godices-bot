@@ -4,6 +4,12 @@ var (
 	userStorage map[string]string = make(map[string]string)
 )
 
+type UserMapping struct {
+	ID           int
+	TelegramName string
+	Login        string
+}
+
 // LoginByTelegram search inner login by telegram username
 func LoginByTelegram(telegram string) (string, bool) {
 	val, ok := userStorage[telegram]
