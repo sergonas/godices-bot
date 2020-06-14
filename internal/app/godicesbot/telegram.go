@@ -2,12 +2,12 @@ package godicesbot
 
 import (
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
-	"log"
 	"net/http"
 	"strconv"
 	"strings"
+
+	log "github.com/sirupsen/logrus"
 )
 
 // BotClient client to specified bot
@@ -23,6 +23,7 @@ func NewBotClient(configuration Config) *BotClient {
 
 // ListenAndServe start bot handler
 func (b *BotClient) ListenAndServe(onUpdate func(Update)) {
+	log.Info("Service started. Trying to get messages")
 	for {
 		updates := b.GetMessages()
 		for _, update := range updates {
@@ -92,25 +93,28 @@ type Chat struct {
 
 // SendAnnouncment send announcment to all event users
 func SendAnnouncment(text string) error {
-	fmt.Println("Announcment: " + text)
+	log.Info("Announcment: " + text)
 	return nil
 }
 
 // GetMessages receives new messages from telegram server
 func (b *BotClient) GetMessages() []Update {
 	res, err := b.makeRequest("getUpdates", "{\"offset\": "+strconv.Itoa(b.lastMaxUpdateID))
-	fmt.Printf("LastUpdateID = %v\n", b.lastMaxUpdateID)
+	log.Infof("LastUpdateID = %v\n", b.lastMaxUpdateID)
 
-	defer res.Body.Close()
 	if err != nil {
 		log.Panic(err)
+	}
+
+	if res != nil {
+		defer res.Body.Close()
 	}
 
 	data, err := ioutil.ReadAll(res.Body)
 	if err != nil {
 		log.Panic(err)
 	}
-	fmt.Printf("Result: %v, %v\n", res.Status, string(data))
+	log.Infof("Result: %v, %v\n", res.Status, string(data))
 	respDataUnm := Response{}
 	err = json.Unmarshal(data, &respDataUnm)
 
@@ -118,7 +122,7 @@ func (b *BotClient) GetMessages() []Update {
 		log.Println(err)
 	}
 
-	fmt.Println(respDataUnm)
+	log.Info(respDataUnm)
 
 	return respDataUnm.Result
 }
